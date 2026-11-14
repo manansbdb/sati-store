@@ -77,8 +77,9 @@ try { manifest = JSON.parse(fs.readFileSync(MANIFEST, 'utf8')); } catch {}
 async function createLink(j) {
   const body = new URLSearchParams();
   body.set('line_items[0][quantity]', '1');
-  body.set('line_items[0][price][currency]', 'usd');
-  body.set('line_items[0][price][unit_amount]', String(j.cents));
+  body.set('line_items[0][price_data][currency]', 'usd');
+  body.set('line_items[0][price_data][unit_amount]', String(j.cents));
+  body.set('line_items[0][price_data][product_data][name]', j.label.slice(0, 100));
   body.set('metadata[sati_key]', j.key);
   body.set('metadata[sati_label]', j.label.slice(0, 80));
   for (let attempt = 1; attempt <= 4; attempt++) {
