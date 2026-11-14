@@ -12,15 +12,20 @@ Dinheiro entra pela **sua conta Stripe** (o "seu sati" = sua conta de recebiment
 - Códigos de pedido (SATI-XXXXXX) + página de tracking (`#track`).
 - Contagem regressiva "founding rate", FAQ, garantias, depoimentos (placeholder — troque por reais quando vierem).
 
-## Pra começar a receber (30 min, $0)
-1. Crie conta Stripe grátis: https://dashboard.stripe.com/signup (dados: nome SATI ou seu CNPJ/empresa; país conforme sua conta bancária).
-2. Em **Payment links**, crie links. Ordem sugerida (maior volume primeiro):
-   - `ig_followers_1000` … `ig_followers_25000`
-   - `pkg_maison_instagram`, `pkg_maison_tiktok` (e demais plataformas)
-   - `ig_likes_1000`, `tt_followers_1000`, `yt_subs_100` …
-3. Cole os URLs em `pay.json` (chave = `serviceId_quantidade`, ver o exemplo comentado dentro do arquivo) e faça `git push`. Pronto — quem clicar em "Pay securely" vai direto pro checkout Stripe.
-   - Alternativa: me mande a chave `sk_live_...` que eu gero todos os links via API numa tarde.
-4. Statement do cartão do cliente aparecerá como **"SATI Growth"** (ajustável em PAYMENTS.BRAND.statement).
+## Como receber (já configurado)
+- Conta Stripe grátis criada (seu e-mail / SATI). Chave **restricted** `rk_live_...` salva em `~/.config/drael/stripe.key` (chmod 600).
+- Os **202 Payment Links** (184 serviços × quantidades + 18 coleções × plataformas) foram gerados via API em `pay.json` por `tools/gen-links.mjs`. Quem clica em "Pay securely" cai direto no checkout Stripe; o dinheiro cai na sua conta.
+- Statement do cartão do cliente: **"SATI Growth"** (ajustável em `PAYMENTS.BRAND.statement`).
+
+### Gerar / atualizar links (quando mudar preço ou item)
+```bash
+cd ~/apps/sati-store
+node tools/gen-links.mjs --dry-run                 # só mostra a tabela de valores
+node tools/gen-links.mjs                           # cria o que falta (idempotente)
+node tools/gen-links.mjs --only ig_followers_      # só chaves com esse prefixo
+node tools/gen-links.mjs --fresh                   # recria tudo do zero
+```
+O script lê o catálogo do próprio `index.html` (fonte única de verdade) — mude preço aí e rode de novo. Depois `git push`: o CDN entrega o novo `pay.json` ~1 min após o push.
 
 ## A parte que ninguém te conta: de onde vêm os seguidores
 A loja recebe o dinheiro; **quem entrega é um painel SMM upstream** (reseller).
@@ -40,7 +45,15 @@ A loja recebe o dinheiro; **quem entrega é um painel SMM upstream** (reseller).
 - Domínio próprio (opcional, ~US$12/ano): aponto depois — `sati.store` ou similar, com redirect pro jsDelivr/Pages.
 
 ## Pendentes seus
-- [ ] Conta Stripe + links (ou me passa a `sk_live_`).
+- [x] Conta Stripe + 202 Payment Links (feito via `tools/gen-links.mjs`, key restricted salva em `~/.config/drael/stripe.key`).
+- [ ] No painel Stripe: verificar se há pendência de identidade/endereço p/ liberação de saques (1º pagamento dispara isso); conferir notificações de e-mail ligadas (Dashboard → Notifications) pra saber quando cair pedido.
 - [ ] Painel upstream com ~US$50 pra primeira entrega.
 - [ ] (Opcional) Depoimentos reais pra substituir os placeholders.
 - [ ] (Opcional) Domínio próprio.
+
+## Fluxo de um pedido (v1)
+1. Cliente escolhe item/quantidade → "Pay securely" → checkout Stripe (seu `pay.json` tem link p/ cada combinação).
+2. Stripe debita o cartão, dinheiro fica em **saldo** na sua conta.
+3. Você vê o pedido em **Dashboard → Payments** (e-mail da notificação). O nome/e-mail do cliente e o item estão lá (item = metadata `sati_key` no payment).
+4. Repassa o pedido no painel upstream com o @/link do cliente (2 min) → confirma.
+5. Saldo: quando quiser, saque pro seu IBAN irlandes (Dashboard → Balances).
