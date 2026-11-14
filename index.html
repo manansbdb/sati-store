@@ -619,7 +619,7 @@ function newCode(){const A="23456789ABCDEFGHJKMNPQRSTVWXYZ";let c="SATI-";for(le
 let orderState={kind:null,item:null,qty:null,email:"",name:"",link:"",platform:"instagram",links:{}};
 
 async function loadPayLinks(){
-  if(orderState.links)return orderState.links;
+  if(orderState.links&&Object.keys(orderState.links).length>0)return orderState.links;
   try{
     const r=await fetch(PAYMENTS.linksUrl,{cache:"no-store"});
     if(r.ok){const j=await r.json();orderState.links=j.links||{};}
