@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://getati.store/sitemap.xml
