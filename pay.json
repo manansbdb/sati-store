@@ -1,0 +1,4 @@
+{
+  "note": "Stripe Payment Links da loja SATI. Chave = serviceId_quantidade (ex.: ig_followers_1000) ou pkg_<pacote>_<plataforma> (ex.: pkg_maison_instagram). 'any' = link genérico de valor custom. Depois do deploy, atualize o PAYMENTS.linksUrl em index.html para o caminho público deste arquivo.",
+  "links": {}
+}

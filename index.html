@@ -1,0 +1,821 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SATI — The Growth Atelier | Followers, Likes & Views, Delivered Quietly</title>
+<meta name="description" content="SATI is a private growth atelier. Curated Instagram, TikTok, YouTube, X and Telegram engagement — delivered in minutes, paced like humans grow, invisible to algorithms. No password required.">
+<meta name="theme-color" content="#0A0A0E">
+<link rel="icon" type="image/png" sizes="512x512" href="assets/icon-512.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta property="og:title" content="SATI — The Growth Atelier">
+<meta property="og:description" content="Curated followers, likes and views. Delivered in minutes, invisible to algorithms. No password required.">
+<meta property="og:image" content="assets/og.png">
+<meta property="og:type" content="website">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[
+{"@type":"Store","name":"SATI","alternateName":"The Growth Atelier","description":"Private growth atelier: curated social media engagement delivered discreetly.","priceRange":"$"},
+{"@type":"Organization","name":"SATI","url":".","logo":"assets/icon-512.png"}
+]}
+</script>
+<style>
+/* ─────────────────────────── SATI · design system ─────────────────────────── */
+:root{
+  --bg:#0A0A0E; --bg2:#0E0E13; --panel:#111117; --panel2:#14141B;
+  --gold:#C6A15B; --gold-hi:#E8D5A3; --gold-deep:#8C6D35; --gold-dim:rgba(198,161,91,.32);
+  --ivory:#F2EFE8; --ivory-dim:#B9B3A7; --muted:#7E7970;
+  --line:rgba(198,161,91,.22); --line-soft:rgba(242,239,232,.08);
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"Jost","Helvetica Neue",Arial,sans-serif;
+  --w:min(1160px,92vw);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ivory);font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::selection{background:var(--gold);color:#0A0A0E}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+img,svg{display:block}
+.wrap{width:var(--w);margin:0 auto}
+/* texture: vinheta + brilho dourado sutil */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(1100px 520px at 50% -8%,rgba(198,161,91,.09),transparent 65%),
+             radial-gradient(900px 700px at 85% 110%,rgba(198,161,91,.05),transparent 60%);}
+main{position:relative;z-index:1}
+section[id]{scroll-margin-top:96px}
+
+.eyebrow{font-family:var(--sans);font-size:11px;font-weight:500;letter-spacing:.42em;text-transform:uppercase;color:var(--gold)}
+.h-display{font-family:var(--serif);font-weight:500;line-height:1.04;letter-spacing:.01em}
+.h-display em{font-style:italic;color:var(--gold-hi)}
+.section{padding:110px 0;position:relative}
+.section-head{text-align:center;margin-bottom:64px}
+.section-head .eyebrow{display:inline-flex;align-items:center;gap:18px}
+.section-head .eyebrow::before,.section-head .eyebrow::after{content:"";width:44px;height:1px;background:var(--gold-dim)}
+.section-head h2{font-size:clamp(34px,4.6vw,52px);margin:18px 0 14px}
+.section-head p{color:var(--ivory-dim);max-width:560px;margin:0 auto;font-size:15px}
+.diamond{display:inline-block;width:5px;height:5px;background:var(--gold);transform:rotate(45deg);margin:0 14px;vertical-align:middle}
+
+/* botões */
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:17px 34px;font-size:12px;font-weight:500;letter-spacing:.28em;text-transform:uppercase;transition:all .35s cubic-bezier(.2,.6,.2,1);white-space:nowrap}
+.btn-gold{background:linear-gradient(135deg,var(--gold-deep),var(--gold) 55%,var(--gold-hi));color:#0B0B0F}
+.btn-gold:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 12px 40px -10px rgba(198,161,91,.45)}
+.btn-line{border:1px solid var(--gold-dim);color:var(--gold-hi)}
+.btn-line:hover{border-color:var(--gold);background:rgba(198,161,91,.07)}
+.btn-ghost{color:var(--ivory-dim);font-size:12px;letter-spacing:.2em;text-transform:uppercase;padding:8px 2px;border-bottom:1px solid transparent}
+.btn-ghost:hover{color:var(--gold-hi);border-color:var(--gold-dim)}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(16px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.6,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+/* ─────────────────────────── ribbon ─────────────────────────── */
+.ribbon{position:relative;z-index:5;background:linear-gradient(90deg,#141117,#1A1620 50%,#141117);border-bottom:1px solid var(--line);text-align:center;padding:11px 16px;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--ivory-dim)}
+.ribbon b{color:var(--gold-hi);font-weight:500}
+.ribbon .cd{font-variant-numeric:tabular-nums;color:var(--gold);letter-spacing:.18em}
+
+/* ─────────────────────────── nav ─────────────────────────── */
+header.nav{position:sticky;top:0;z-index:40;background:rgba(10,10,14,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line-soft)}
+.nav-in{width:var(--w);margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+.wordmark{font-family:var(--serif);font-size:26px;font-weight:500;letter-spacing:.44em;color:var(--gold-hi);text-indent:.44em;cursor:pointer;user-select:none}
+.nav-links{display:flex;gap:38px;align-items:center}
+.nav-links a{font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--ivory-dim);transition:color .3s}
+.nav-links a:hover{color:var(--gold-hi)}
+.nav-cta{padding:12px 24px;font-size:10.5px}
+@media(max-width:860px){.nav-links{display:none}}
+
+/* ─────────────────────────── hero ─────────────────────────── */
+.hero{padding:120px 0 90px;text-align:center;position:relative}
+.hero h1{font-size:clamp(46px,7.2vw,84px);margin:26px auto 26px;max-width:900px}
+.hero .sub{color:var(--ivory-dim);max-width:620px;margin:0 auto 44px;font-size:16.5px;font-weight:300}
+.hero-ctas{display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
+.trust-row{margin-top:66px;display:flex;justify-content:center;align-items:center;flex-wrap:wrap;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.trust-row .diamond{margin:0 16px;width:4px;height:4px}
+.hero-glyph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:-1}
+.hero-glyph span{font-family:var(--serif);font-size:min(72vw,560px);line-height:1;color:rgba(198,161,91,.045);user-select:none}
+
+/* ─────────────────────────── marquee ─────────────────────────── */
+.marquee{border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft);overflow:hidden;padding:20px 0;background:var(--bg2)}
+.marquee-track{display:flex;width:max-content;animation:mq 46s linear infinite}
+.marquee span{font-family:var(--serif);font-size:19px;letter-spacing:.4em;color:var(--muted);white-space:nowrap;padding-right:60px;text-transform:uppercase}
+.marquee i{font-style:normal;color:var(--gold);font-size:9px;vertical-align:3px;padding-right:60px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ─────────────────────────── services ─────────────────────────── */
+.tabs{display:flex;justify-content:center;flex-wrap:wrap;gap:6px;margin-bottom:56px}
+.tab{padding:11px 22px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);border:1px solid transparent;transition:all .3s}
+.tab:hover{color:var(--ivory-dim)}
+.tab.on{color:var(--gold-hi);border-color:var(--gold-dim);background:rgba(198,161,91,.06)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));background:transparent;border-top:1px solid var(--line-soft);border-left:1px solid var(--line-soft)}
+.card{background:var(--bg);padding:38px 34px 34px;position:relative;transition:background .35s;display:flex;flex-direction:column;gap:0;border-right:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.card:hover{background:var(--panel)}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:26px}
+.card-plat{display:flex;align-items:center;gap:10px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.card-plat svg{width:19px;height:19px;stroke:var(--gold);fill:none;stroke-width:1.3;opacity:.85}
+.card h3{font-family:var(--serif);font-size:27px;font-weight:500;letter-spacing:.02em}
+.card .blurb{color:var(--ivory-dim);font-size:13.5px;line-height:1.65;margin:10px 0 26px;flex:1}
+.card-foot{display:flex;align-items:flex-end;justify-content:space-between;border-top:1px solid var(--line-soft);padding-top:20px}
+.price-from{font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted)}
+.price-from b{display:block;font-family:var(--serif);font-size:26px;font-weight:500;color:var(--gold-hi);letter-spacing:0;margin-top:4px;font-variant-numeric:tabular-nums}
+.card-order{font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--ivory-dim);display:inline-flex;align-items:center;gap:8px;transition:all .3s}
+.card-order::after{content:"→";transition:transform .3s}
+.card:hover .card-order{color:var(--gold-hi)}
+.card:hover .card-order::after{transform:translateX(4px)}
+
+/* ─────────────────────────── packages ─────────────────────────── */
+#packages{background:var(--bg2);border-top:1px solid var(--line-soft);border-bottom:1px solid var(--line-soft)}
+.pkgs{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:26px;max-width:1060px;margin:0 auto}
+.pkg{position:relative;background:var(--panel);border:1px solid var(--line-soft);padding:48px 38px 42px;display:flex;flex-direction:column;transition:border-color .35s,transform .35s}
+.pkg:hover{border-color:var(--gold-dim);transform:translateY(-4px)}
+.pkg.star{border-color:var(--gold-dim);background:linear-gradient(180deg,rgba(198,161,91,.07),var(--panel) 34%)}
+.pkg-badge{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:var(--gold);color:#0B0B0F;font-size:9px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;padding:6px 16px 5px;white-space:nowrap}
+.pkg h3{font-family:var(--serif);font-size:34px;font-weight:500;text-align:center;letter-spacing:.06em}
+.pkg .pk-tag{text-align:center;color:var(--muted);font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin:8px 0 30px}
+.pkg .pk-price{text-align:center;margin-bottom:6px}
+.pkg .pk-price b{font-family:var(--serif);font-size:52px;font-weight:500;color:var(--gold-hi);letter-spacing:.01em}
+.pkg .pk-price span{display:block;font-size:10px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;margin-top:8px}
+.pkg .pk-worth{text-align:center;font-size:11.5px;color:var(--muted);letter-spacing:.06em;margin-bottom:30px}
+.pkg .pk-worth b{color:var(--ivory-dim);font-weight:400}
+.pkg ul{list-style:none;flex:1;border-top:1px solid var(--line-soft);padding-top:26px;margin-bottom:34px}
+.pkg li{padding:9px 0;font-size:13.5px;color:var(--ivory-dim);display:flex;gap:13px;align-items:baseline}
+.li::before{content:"◆";color:var(--gold);font-size:7px}
+.pkg .btn{width:100%}
+
+/* ─────────────────────────── how ─────────────────────────── */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:60px 48px;max-width:980px;margin:0 auto}
+.step .n{font-family:var(--serif);font-size:15px;color:var(--gold);letter-spacing:.4em}
+.step h3{font-family:var(--serif);font-size:26px;font-weight:500;margin:16px 0 12px}
+.step p{color:var(--ivory-dim);font-size:14px}
+.no-pass{margin-top:78px;text-align:center;border:1px solid var(--line);padding:26px;display:flex;align-items:center;justify-content:center;gap:16px;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--ivory-dim);flex-wrap:wrap}
+.no-pass b{color:var(--gold-hi);font-weight:500}
+
+/* ─────────────────────────── guarantee ─────────────────────────── */
+.gtiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line-soft);border:1px solid var(--line-soft)}
+.gtile{background:var(--bg);padding:42px 34px}
+.gtile h3{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--gold-hi);letter-spacing:.04em;margin-bottom:12px}
+.gtile p{font-size:13.5px;color:var(--ivory-dim);line-height:1.7}
+.gtile .gic{width:30px;height:30px;margin-bottom:22px;stroke:var(--gold);fill:none;stroke-width:1.2}
+
+/* ─────────────────────────── testimonials ─────────────────────────── */
+.quotes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:26px;max-width:1060px;margin:0 auto}
+.quote{border-left:1px solid var(--gold-dim);padding:8px 0 8px 30px}
+.quote p{font-family:var(--serif);font-size:21px;font-style:italic;line-height:1.5;color:var(--ivory)}
+.quote footer{margin-top:18px;font-size:10.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted)}
+
+/* ─────────────────────────── faq ─────────────────────────── */
+.faq{max-width:760px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--line-soft)}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:26px 4px;text-align:left;font-family:var(--serif);font-size:21px;font-weight:500;color:var(--ivory);letter-spacing:.01em;transition:color .3s}
+.faq-q:hover{color:var(--gold-hi)}
+.faq-q .pm{font-family:var(--sans);font-size:18px;color:var(--gold);transition:transform .35s;flex-shrink:0}
+.faq-item.open .pm{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.2,.6,.2,1)}
+.faq-a div{padding:0 4px 28px;color:var(--ivory-dim);font-size:14.5px;max-width:640px}
+
+/* ─────────────────────────── final cta / footer ─────────────────────────── */
+.final{text-align:center;padding:130px 0}
+.final h2{font-size:clamp(38px,5.4vw,62px);margin:20px 0 40px}
+footer.site{border-top:1px solid var(--line-soft);background:var(--bg2);padding:70px 0 40px}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:50px;margin-bottom:56px}
+.ft-grid h4{font-size:10px;letter-spacing:.34em;text-transform:uppercase;color:var(--muted);margin-bottom:20px}
+.ft-grid a,.ft-grid span.li2{display:block;font-size:13.5px;color:var(--ivory-dim);padding:6px 0}
+.ft-grid a:hover{color:var(--gold-hi)}
+.ft-brand .wordmark{font-size:22px}
+.ft-brand p{color:var(--muted);font-size:12.5px;margin-top:14px;max-width:300px;line-height:1.7}
+.ft-bottom{border-top:1px solid var(--line-soft);padding-top:28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:10.5px;letter-spacing:.12em;color:var(--muted)}
+@media(max-width:760px){.ft-grid{grid-template-columns:1fr;gap:34px}}
+
+/* ─────────────────────────── modal / overlays ─────────────────────────── */
+.overlay{position:fixed;inset:0;z-index:80;background:rgba(6,6,9,.8);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .35s}
+.overlay.on{opacity:1;pointer-events:auto}
+.modal{width:min(560px,100%);max-height:92vh;overflow-y:auto;background:var(--panel2);border:1px solid var(--line);padding:46px 44px 40px;position:relative;transform:translateY(14px);transition:transform .35s cubic-bezier(.2,.6,.2,1)}
+.overlay.on .modal{transform:none}
+.modal::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+.m-close{position:absolute;top:18px;right:18px;font-size:20px;color:var(--muted);padding:8px;transition:color .3s}
+.m-close:hover{color:var(--gold-hi)}
+.m-head .eyebrow{font-size:9.5px}
+.m-head h3{font-family:var(--serif);font-size:30px;font-weight:500;margin:10px 0 4px}
+.m-head .m-sub{color:var(--muted);font-size:12.5px;letter-spacing:.06em}
+.field{margin-top:26px}
+.field label{display:block;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--line-soft);color:var(--ivory);padding:15px 16px;font-family:var(--sans);font-size:14.5px;font-weight:300;outline:none;transition:border-color .3s;border-radius:0;-webkit-appearance:none;appearance:none}
+.field input:focus,.field select:focus{border-color:var(--gold-dim)}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23C6A15B' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.qty-chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:10px 16px;border:1px solid var(--line-soft);font-size:12.5px;color:var(--ivory-dim);letter-spacing:.05em;font-variant-numeric:tabular-nums;transition:all .25s}
+.chip:hover{border-color:var(--gold-dim)}
+.chip.on{border-color:var(--gold);color:var(--gold-hi);background:rgba(198,161,91,.08)}
+.custom-q{margin-top:12px;display:flex;gap:10px}
+.custom-q input{flex:1}
+.bundle-list{border:1px solid var(--line-soft);padding:18px 20px;margin-top:26px}
+.bundle-list div{display:flex;justify-content:space-between;padding:7px 0;font-size:13.5px;color:var(--ivory-dim)}
+.bundle-list div span:last-child{font-variant-numeric:tabular-nums;color:var(--ivory)}
+.total-box{margin-top:28px;border-top:1px solid var(--line);padding-top:22px;display:flex;justify-content:space-between;align-items:flex-end}
+.total-box .t-l{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted)}
+.total-box .t-l span{display:block;margin-top:6px;font-size:11px;letter-spacing:.04em;text-transform:none;color:var(--muted);opacity:.8}
+.total-box b{font-family:var(--serif);font-size:36px;font-weight:500;color:var(--gold-hi);font-variant-numeric:tabular-nums}
+.pay-row{display:flex;flex-direction:column;gap:12px;margin-top:30px}
+.pay-row .btn{width:100%}
+.pay-note{margin-top:16px;text-align:center;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.confirm{text-align:center;padding:14px 0 4px}
+.confirm .ok{width:64px;height:64px;margin:0 auto 26px;border:1px solid var(--gold);transform:rotate(45deg);display:flex;align-items:center;justify-content:center}
+.confirm .ok span{transform:rotate(-45deg);font-size:22px;color:var(--gold-hi)}
+.confirm h3{font-family:var(--serif);font-size:30px;font-weight:500;margin-bottom:10px}
+.confirm p{color:var(--ivory-dim);font-size:14px;max-width:380px;margin:0 auto}
+.order-code{margin:28px auto;display:inline-block;border:1px solid var(--gold-dim);padding:14px 30px;font-size:15px;letter-spacing:.3em;color:var(--gold-hi);font-variant-numeric:tabular-nums}
+.confirm .pay-row{margin-top:30px}
+.track-box{width:min(460px,100%)}
+.t-status{margin-top:26px;border:1px solid var(--line-soft);padding:22px 24px}
+.t-status .ts-row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;color:var(--muted)}
+.t-status .ts-row.done{color:var(--ivory)}
+.t-status .ts-row b{font-weight:400;letter-spacing:.14em;text-transform:uppercase;font-size:10px;padding-top:2px}
+.t-status .ts-row.done b{color:var(--gold)}
+.err-msg{color:#D08C6A;font-size:12.5px;margin-top:10px;min-height:16px}
+
+/* toast */
+.toast{position:fixed;bottom:28px;left:50%;transform:translate(-50%,20px);z-index:99;background:var(--panel2);border:1px solid var(--gold-dim);color:var(--ivory);padding:15px 26px;font-size:12.5px;letter-spacing:.06em;opacity:0;pointer-events:none;transition:all .4s;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+@media(max-width:640px){
+  .section{padding:76px 0}
+  .hero{padding:84px 0 64px}
+  .card{padding:30px 26px 28px}
+  .modal{padding:38px 26px 32px}
+  .section-head h2{font-size:31px}
+}
+</style>
+</head>
+<body>
+
+<div class="ribbon" id="ribbon"><span>Founding rate · pricing locks when the timer hits zero — <span class="cd" id="countdown">--:--:--</span></span></div>
+
+<header class="nav"><div class="nav-in">
+  <div class="wordmark" onclick="location.href='#'">SATI</div>
+  <nav class="nav-links">
+    <a href="#services">Services</a><a href="#packages">Collections</a><a href="#how">How it works</a><a href="#guarantee">Guarantee</a><a href="#faq">FAQ</a><a href="#track">Track order</a>
+  </nav>
+  <button class="btn btn-gold nav-cta" onclick="openPackage('maison')">Order now</button>
+</div></header>
+
+<main>
+<!-- HERO -->
+<section class="hero wrap">
+  <div class="hero-glyph"><span>S</span></div>
+  <div class="eyebrow">The Growth Atelier</div>
+  <h1 class="h-display">Attention, <em>beautifully</em> delivered.</h1>
+  <p class="sub">Curated followers, likes and views for Instagram, TikTok, YouTube, X and Telegram. Delivered in minutes, paced the way real audiences grow, and invisible to algorithms.</p>
+  <div class="hero-ctas">
+    <button class="btn btn-gold" onclick="openService('ig_followers')">Begin an order</button>
+    <button class="btn btn-line" onclick="document.getElementById('packages').scrollIntoView({behavior:'smooth'})">View the collections</button>
+  </div>
+  <div class="trust-row">
+    <span>No password ever</span><span class="diamond"></span>
+    <span>Starts in minutes</span><span class="diamond"></span>
+    <span>30-day refill</span><span class="diamond"></span>
+    <span>Secure checkout · Stripe</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true"><div class="marquee-track" id="mq"></div></div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The Menu</div>
+      <h2 class="h-display">Growth, <em>by platform.</em></h2>
+      <p>Choose your stage. Every service begins quietly and arrives in natural waves — because sudden numbers are the ones that fade.</p>
+    </div>
+    <div class="tabs reveal" id="tabs"></div>
+    <div class="grid reveal" id="svcGrid"></div>
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section class="section" id="packages">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The Collections</div>
+      <h2 class="h-display">Ready-made <em>presence.</em></h2>
+      <p>Three curated builds on the platform of your choice. Priced for people who would rather not think about it.</p>
+    </div>
+    <div class="pkgs reveal" id="pkgGrid"></div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="section" id="how">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The Ritual</div>
+      <h2 class="h-display">Three steps. <em>That's all.</em></h2>
+    </div>
+    <div class="steps reveal">
+      <div class="step"><div class="n">01</div><h3>Choose</h3><p>Pick a service or a collection, and share your public profile or post link. Nothing more is asked of you.</p></div>
+      <div class="step"><div class="n">02</div><h3>Pay</h3><p>Settle up by card, Apple Pay or Google Pay through Stripe. Your bank details never pass our hands.</p></div>
+      <div class="step"><div class="n">03</div><h3>It arrives</h3><p>Delivery begins within minutes and progresses in gentle waves. You receive an order code to follow every step.</p></div>
+    </div>
+    <div class="no-pass reveal">We never ask for your password <span class="diamond"></span> <b>ever.</b></div>
+  </div>
+</section>
+
+<!-- GUARANTEE -->
+<section class="section" id="guarantee" style="padding-top:20px">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">The Promise</div>
+      <h2 class="h-display">Kept, <em>quietly.</em></h2>
+    </div>
+    <div class="gtiles reveal">
+      <div class="gtile"><svg class="gic" viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 4.4-3 8-7 9-4-1-7-4.6-7-9V7l7-4z"/><path d="M9 12l2 2 4-4"/></svg><h3>30-Day Refill</h3><p>Numbers settle as real audiences do. If anything drops within 30 days, we refill it automatically — no forms, no arguing.</p></div>
+      <div class="gtile"><svg class="gic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><h3>Natural Pacing</h3><p>Your order arrives in soft waves across hours and days — the rhythm the platforms read as organic.</p></div>
+      <div class="gtile"><svg class="gic" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><h3>No Password Required</h3><p>A public link is all we take. Your account, your private moments, your business — they stay yours alone.</p></div>
+      <div class="gtile"><svg class="gic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg><h3>Discreet Billing</h3><p>Your statement reads “SATI Growth”. Nothing loud, nothing explaining itself.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" style="padding-top:30px">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Word of Mouth</div>
+      <h2 class="h-display">Spoken <em>low.</em></h2>
+    </div>
+    <div class="quotes reveal">
+      <div class="quote"><p>“It simply arrived. My profile stopped looking empty, and the tone of the DMs changed a week later.”</p><footer>Creator — 400K on Instagram</footer></div>
+      <div class="quote"><p>“I bought before I believed. The pacing was so natural I told my team the organic push was finally working.”</p><footer>Founder — Lifestyle brand</footer></div>
+      <div class="quote"><p>“Fast, quiet, professional. No passwords, no noise. This is how a grown-up service should feel.”</p><footer>Media buyer — Performance</footer></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq" style="padding-top:30px">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Asked, Answered</div>
+      <h2 class="h-display">Questions, <em>handled.</em></h2>
+    </div>
+    <div class="faq reveal" id="faqBox"></div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final wrap reveal">
+  <div class="eyebrow">When ready</div>
+  <h2 class="h-display">Your audience is<br><em>already waiting.</em></h2>
+  <button class="btn btn-gold" onclick="openService('ig_followers')">Begin an order</button>
+</section>
+</main>
+
+<footer class="site"><div class="wrap">
+  <div class="ft-grid">
+    <div class="ft-brand">
+      <div class="wordmark">SATI</div>
+      <p>The Growth Atelier. Curated social presence, delivered discreetly. Built for people who understand that attention compounds.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="#services">Services</a><a href="#packages">Collections</a><a href="#how">How it works</a><a href="#guarantee">Guarantee</a><a href="#faq">FAQ</a><a href="#track">Track order</a>
+    </div>
+    <div>
+      <h4>Concierge</h4>
+      <a href="#" onclick="waContact();return false">WhatsApp — +353 83 829 1142</a>
+      <a href="mailto:matheusfcar@icloud.com">matheusfcar@icloud.com</a>
+      <span class="li2">Replies within hours, seven days.</span>
+    </div>
+  </div>
+  <div class="ft-bottom">
+    <span>© 2026 SATI — The Growth Atelier. All rights reserved.</span>
+    <span>Independent service · Not affiliated with Meta, TikTok, Google or X Corp.</span>
+  </div>
+</div></footer>
+
+<!-- ORDER MODAL -->
+<div class="overlay" id="orderOverlay" onclick="if(event.target===this)closeOrder()">
+  <div class="modal" role="dialog" aria-modal="true">
+    <button class="m-close" onclick="closeOrder()" aria-label="Close">×</button>
+    <div id="orderBody"></div>
+  </div>
+</div>
+
+<!-- TRACK MODAL -->
+<div class="overlay" id="trackOverlay" onclick="if(event.target===this)closeTrack()">
+  <div class="modal track-box" role="dialog" aria-modal="true">
+    <button class="m-close" onclick="closeTrack()" aria-label="Close">×</button>
+    <div class="m-head"><div class="eyebrow">Order Desk</div><h3>Track your order</h3><div class="m-sub">Enter the code you received, e.g. SATI-8K2MQP</div></div>
+    <div class="field"><input id="trackCode" placeholder="SATI-······" autocomplete="off" style="letter-spacing:.2em;text-transform:uppercase"></div>
+    <div class="err-msg" id="trackErr"></div>
+    <button class="btn btn-line" style="width:100%;margin-top:14px" onclick="doTrack()">Find my order</button>
+    <div id="trackResult"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ══════════════════════════ CONFIG — edite aqui ══════════════════════════ */
+const BRAND = { name:"SATI", statement:"SATI Growth" };
+
+const PAYMENTS = {
+  // "links" = usa Stripe Payment Links de pay.json quando existir; senão cai no concierge.
+  mode: "links",
+  // Substitua pelo seu repositório deployado (mesmo caminho deste site):
+  linksUrl: "pay.json",
+  // Fallback humano — dinheiro entra NA SUA conta Stripe (crie o link no dashboard e mande ao cliente):
+  conciergeWhatsapp: "353838291142",
+  conciergeEmail: "matheusfcar@icloud.com"
+};
+
+const PLATFORMS = [
+  {id:"instagram", name:"Instagram", glyph:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.3" cy="6.7" r="0.6"/>'},
+  {id:"tiktok", name:"TikTok", glyph:'<path d="M14.5 4v10.6"/><path d="M14.5 4c.9 2.6 2.6 4 5.1 4.2v3c-2 0-3.7-.6-5.1-1.7"/><circle cx="11.6" cy="17.2" r="2.9"/>'},
+  {id:"youtube", name:"YouTube", glyph:'<rect x="2.6" y="5.2" width="18.8" height="13.6" rx="4"/><path d="M10.4 9.4l5 2.6-5 2.6z"/>'},
+  {id:"facebook", name:"Facebook", glyph:'<path d="M13.5 21v-7h2.6l.5-3.2h-3.1V8.6c0-1 .4-1.6 1.7-1.6h1.6V4.2c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.4-4 4v2.7H8v3.2h2.4v7"/>'},
+  {id:"x", name:"X", glyph:'<path d="M4.5 4.5l15 15"/><path d="M19.5 4.5l-15 15"/>'},
+  {id:"telegram", name:"Telegram", glyph:'<path d="M21 4L3.4 10.9l5.3 2 1.9 6.1 2.9-4.1 5 3.7L21 4z"/><path d="M8.9 13.1L19 6.5"/>'},
+  {id:"threads", name:"Threads", glyph:'<circle cx="12" cy="12" r="8.2"/><path d="M16.9 13.9c-.5 2-2.3 3.1-4.4 2.9-2.4-.2-3.9-1.5-4-3.4-.1-2 1.5-3.6 3.7-3.7 2-.1 3.6.7 3.6 2.6 0 1.6-1.2 2.5-2.8 2.4-1.2-.1-2-.7-2.1-1.6"/>'}
+];
+
+/* per = preço por unitSize unidades (centavos-free: USD). from = preço mínimo exibido ("From").
+   presets = quantidades sugeridas. kind define preset padrão. */
+const CATALOG = [
+ // instagram
+ {id:"ig_followers",platform:"instagram",name:"Followers",blurb:"High-retention followers that build authority without shouting.",per:5.99,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000,10000,25000]},
+ {id:"ig_likes",platform:"instagram",name:"Likes",blurb:"Push posts to Explore and signal quality instantly.",per:3.49,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000,10000]},
+ {id:"ig_views",platform:"instagram",name:"Views",blurb:"Boost Reel reach and feed the algorithm where it listens.",per:2.49,unitSize:1000,min:500,presets:[500,1000,2500,5000,10000,25000,50000]},
+ {id:"ig_comments",platform:"instagram",name:"Custom Comments",blurb:"Real custom comments that lift engagement rate and start conversations.",per:0.999,unitSize:1,min:10,presets:[10,25,50,100,250],unitLabel:"comments"},
+ {id:"ig_reel_likes",platform:"instagram",name:"Reel Likes",blurb:"Supercharge your Reels with counts the algorithm respects.",per:3.5,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000]},
+ {id:"ig_story_views",platform:"instagram",name:"Story Views",blurb:"Make every story feel like the room is full.",per:1.49,unitSize:1000,min:500,presets:[500,1000,2500,5000,10000]},
+ // tiktok
+ {id:"tt_followers",platform:"tiktok",name:"Followers",blurb:"Algorithm-safe, high-quality followers for a profile that looks established.",per:8.99,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000,10000]},
+ {id:"tt_likes",platform:"tiktok",name:"Likes",blurb:"Push content onto more For You Pages, gently and steadily.",per:2.99,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000,10000]},
+ {id:"tt_views",platform:"tiktok",name:"Views",blurb:"Trigger TikTok's algorithm with instant, countable attention.",per:1.99,unitSize:1000,min:500,presets:[500,1000,2500,5000,10000,25000,50000]},
+ {id:"tt_shares",platform:"tiktok",name:"Shares",blurb:"Shares are TikTok's strongest virality signal. Borrow its favor.",per:2.72,unitSize:1000,min:100,presets:[100,250,500,1000,2500]},
+ {id:"tt_comments",platform:"tiktok",name:"Custom Comments",blurb:"Custom comments that spark real conversations under your best work.",per:0.2,unitSize:1,min:10,presets:[10,25,50,100,250],unitLabel:"comments"},
+ // youtube
+ {id:"yt_subs",platform:"youtube",name:"Subscribers",blurb:"Build a credible channel and reach the monetization threshold.",per:19.97,unitSize:1000,min:50,presets:[50,100,250,500,1000,2500,5000]},
+ {id:"yt_views",platform:"youtube",name:"Views",blurb:"Drive views that count toward watch time and search ranking.",per:4.99,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000,10000]},
+ {id:"yt_likes",platform:"youtube",name:"Likes",blurb:"Strong like ratios boost ranking and tell viewers the story.",per:2.99,unitSize:1000,min:50,presets:[50,100,250,500,1000,2500]},
+ {id:"yt_watch",platform:"youtube",name:"Watch Hours",blurb:"Hit 4,000 hours and unlock the YouTube Partner Program.",per:0.4099,unitSize:1,min:100,max:20000,presets:[100,250,500,1000,4000],unitLabel:"hours"},
+ {id:"yt_comments",platform:"youtube",name:"Custom Comments",blurb:"Boost community signals with custom comments on any video.",per:0.3,unitSize:1,min:10,presets:[10,25,50,100,250],unitLabel:"comments"},
+ // facebook
+ {id:"fb_followers",platform:"facebook",name:"Followers",blurb:"Real-looking, high-retention followers for profile or page.",per:5.99,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000,10000]},
+ {id:"fb_page_likes",platform:"facebook",name:"Page Likes",blurb:"Page likes boost ad credibility and reduce your CPM.",per:12.0,unitSize:1000,min:100,presets:[100,250,500,1000,2500]},
+ {id:"fb_post_likes",platform:"facebook",name:"Post Likes",blurb:"Improve post visibility with stronger engagement signals.",per:3.5,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000]},
+ {id:"fb_views",platform:"facebook",name:"Video Views",blurb:"Drive view counts for organic reach and shares.",per:3.2,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000]},
+ {id:"fb_comments",platform:"facebook",name:"Custom Comments",blurb:"Custom comments that push posts higher in the feed.",per:0.28,unitSize:1,min:10,presets:[10,25,50,100],unitLabel:"comments"},
+ // x
+ {id:"x_followers",platform:"x",name:"Followers",blurb:"Build authority on X with a following that reads as earned.",per:8.99,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000,10000]},
+ {id:"x_likes",platform:"x",name:"Likes",blurb:"Boost post engagement inside X's recommendation feed.",per:2.99,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000]},
+ {id:"x_retweets",platform:"x",name:"Reposts",blurb:"Amplify reach and spark the loop that makes X move.",per:3.9,unitSize:1000,min:100,presets:[100,250,500,1000,2500]},
+ {id:"x_views",platform:"x",name:"Impressions",blurb:"Increase impressions and establish authority per profile visit.",per:2.99,unitSize:1000,min:500,presets:[500,1000,2500,5000,10000]},
+ // telegram
+ {id:"tg_members",platform:"telegram",name:"Channel Members",blurb:"Grow your Telegram community with members that hold.",per:14.4,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000]},
+ {id:"tg_views",platform:"telegram",name:"Post Views",blurb:"Increase visibility for every post in your channel.",per:1.44,unitSize:1000,min:500,presets:[500,1000,2500,5000,10000]},
+ {id:"tg_reactions",platform:"telegram",name:"Reactions",blurb:"Add stronger social proof to channel posts with reactions.",per:0.3,unitSize:1,min:10,presets:[10,25,50,100,250],unitLabel:"reactions"},
+ // threads
+ {id:"th_followers",platform:"threads",name:"Followers",blurb:"Build a stronger audience on Threads while it's still cheap.",per:5.0,unitSize:1000,min:100,presets:[100,250,500,1000,2500,5000]},
+ {id:"th_likes",platform:"threads",name:"Likes",blurb:"Increase engagement on your Threads posts, quietly.",per:3.99,unitSize:1000,min:100,presets:[100,250,500,1000,2500]},
+ {id:"th_reposts",platform:"threads",name:"Reposts",blurb:"Expand the reach of your best Threads posts.",per:1.99,unitSize:1000,min:100,presets:[100,250,500,1000]}
+];
+
+/* Coleções — componentes por tipo; preços calculados contra o menu da plataforma escolhida. */
+const PACKAGES = [
+  {id:"eclat",   name:"Éclat",    price:49,  tag:"The first impression",  items:[["followers",2500],["likes",7500],["views",25000],["comments",10]]},
+  {id:"maison",  name:"Maison",   price:149, tag:"The statement", star:true, items:[["followers",10000],["likes",20000],["views",75000],["comments",50]]},
+  {id:"signature",name:"Signature",price:299,tag:"The landmark",        items:[["followers",25000],["likes",50000],["views",150000],["comments",100]]}
+];
+
+const FAQS = [
+ ["Do I need to give you my password?","Never. We work from a public profile or post link only. Your account, your private moments, your business — they stay yours alone."],
+ ["How fast is delivery?","Most orders begin within fifteen minutes of payment. Larger orders are intentionally paced over 24–72 hours, in waves, so the growth reads as organic and holds."],
+ ["Will it affect my account or algorithm?","No. Gradual, human-paced increments are exactly what the platforms expect to see. That discipline is why SATI numbers stay put while others decay."],
+ ["What happens if numbers drop?","Audiences settle, like any living thing. Anything lost within 30 days is refilled automatically — no forms, no negotiation."],
+ ["How do I pay?","By card, Apple Pay or Google Pay through Stripe. For PIX, transfer or larger custom builds, write to the concierge and we'll arrange it personally."],
+ ["Can I get a refund?","If a delivery fails to perform, you're refunded in full. If something feels off in your first 48 hours, speak to us first — we resolve before we refund."],
+ ["Is my information safe?","We keep only what the order needs: your link, your name and your email. Nothing sold, nothing shared, nothing stored longer than needed."]
+];
+
+/* ══════════════════════════ util ══════════════════════════ */
+const $=s=>document.querySelector(s);
+const fmt=n=>"$"+n.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtI=n=>n.toLocaleString("en-US");
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),3600);}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
+function svgGlyph(p,size=19){return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;}
+const plat=id=>PLATFORMS.find(p=>p.id===id);
+const svc=id=>CATALOG.find(s=>s.id===id);
+
+function computePrice(s,qty){
+  let p=s.per*qty/s.unitSize;
+  const from=pFrom(s);
+  p=Math.max(p,from);
+  let disc=0;
+  if(s.unitSize===1000&&qty>=25000)disc=.10; else if(s.unitSize===1000&&qty>=10000)disc=.05;
+  return {raw:p*(1-disc), base:p, disc};
+}
+function pFrom(s){
+  return s.unitSize===1000 ? Math.round(s.per*100)/100 : Math.round(computePriceRaw(s,s.min)*100)/100;
+}
+function computePriceRaw(s,q){let p=s.per*q/s.unitSize;let d=0;if(s.unitSize===1000&&q>=25000)d=.10;else if(s.unitSize===1000&&q>=10000)d=.05;return Math.round(p*(1-d)*100)/100;}
+
+/* ══════════════════════════ marquee ══════════════════════════ */
+(function(){
+  const names=PLATFORMS.map(p=>p.name).join("");
+  let cell="";PLATFORMS.forEach(p=>cell+=`<span>${p.name}</span><i>◆</i>`);
+  $("#mq").innerHTML=cell+cell;
+})();
+
+/* ══════════════════════════ countdown (meia-noite UTC) ══════════════════════════ */
+(function(){
+  function tick(){
+    const now=new Date();
+    const end=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth(),now.getUTCDate()+1));
+    let s=Math.max(0,Math.floor((end-now)/1000));
+    const h=String(Math.floor(s/3600)).padStart(2,"0"),m=String(Math.floor(s%3600/60)).padStart(2,"0"),ss=String(s%60).padStart(2,"0");
+    $("#countdown").textContent=`${h}:${m}:${ss}`;
+  }
+  tick();setInterval(tick,1000);
+})();
+
+/* ══════════════════════════ serviços / tabs ══════════════════════════ */
+let activeTab="all";
+function renderTabs(){
+  const t=$("#tabs");
+  t.innerHTML=`<button class="tab ${activeTab==="all"?"on":""}" onclick="setTab('all')">All platforms</button>`+
+    PLATFORMS.map(p=>`<button class="tab ${activeTab===p.id?"on":""}" onclick="setTab('${p.id}')">${p.name}</button>`).join("");
+}
+function setTab(id){activeTab=id;renderTabs();renderGrid();}
+function renderGrid(){
+  const g=$("#svcGrid");
+  const items=activeTab==="all"
+    ? CATALOG.filter((s,i,arr)=>arr.findIndex(x=>x.platform===s.platform)===i && arr.filter(x=>x.platform===s.platform).indexOf(s)<3)
+    : CATALOG.filter(s=>s.platform===activeTab);
+  g.innerHTML=items.map(s=>{
+    const p=plat(s.platform);
+    return `<div class="card">
+      <div class="card-top"><div class="card-plat" style="color:var(--muted)">${svgGlyph(p.glyph)} ${p.name}</div></div>
+      <h3>${s.name}</h3>
+      <div class="blurb">${s.blurb}</div>
+      <div class="card-foot">
+        <div class="price-from">From <b>${fmt(pFrom(s))}</b></div>
+        <button class="card-order" onclick="openService('${s.id}')">Order</button>
+      </div>
+    </div>`;
+  }).join("");
+}
+
+/* ══════════════════════════ pacotes ══════════════════════════ */
+function pkgWorth(pkg,platformId){
+  const pre={followers:"_followers",likes:"_likes",views:"_views",comments:"_comments"}[pkg.items[0]?pkg.items[0][0]:""];
+  const map={instagram:{followers:"ig_followers",likes:"ig_likes",views:"ig_views",comments:"ig_comments"},
+             tiktok:{followers:"tt_followers",likes:"tt_likes",views:"tt_views",comments:"tt_comments"},
+             youtube:{followers:"yt_subs",likes:"yt_likes",views:"yt_views",comments:"yt_comments"},
+             x:{followers:"x_followers",likes:"x_likes",views:"x_views",comments:null},
+             telegram:{followers:"tg_members",likes:"tg_reactions",views:"tg_views",comments:null},
+             threads:{followers:"th_followers",likes:"th_likes",views:"th_reposts",comments:null}}[platformId||"instagram"];
+  let tot=0;pkg.items.forEach(([t,q])=>{const s=map[t]?svc(map[t]):null;if(s)tot+=computePriceRaw(s,q);});
+  return tot;
+}
+function renderPkgs(){
+  $("#pkgGrid").innerHTML=PACKAGES.map(pk=>{
+    const worth=pkgWorth(pk,"instagram");
+    return `<div class="pkg ${pk.star?"star":""}">
+      ${pk.star?'<div class="pkg-badge">Most chosen</div>':""}
+      <h3>${pk.name}</h3><div class="pk-tag">${pk.tag}</div>
+      <div class="pk-price"><b>$${pk.price}</b><span> · one platform, your choice</span></div>
+      <div class="pk-worth">à la carte worth <b>${fmt(worth)}</b> on the menu</div>
+      <ul>${pk.items.map(([t,q])=>`<li><span class="li"></span>${fmtI(q)} ${labelFor(t)}</li>`).join("")}</ul>
+      <button class="btn ${pk.star?"btn-gold":"btn-line"}" onclick="openPackage('${pk.id}')">Order ${pk.name}</button>
+    </div>`;
+  }).join("");
+}
+function labelFor(t){return {followers:"followers",likes:"likes",views:"views",comments:"custom comments"}[t]||t;}
+
+/* ══════════════════════════ FAQ ══════════════════════════ */
+$("#faqBox").innerHTML=FAQS.map(([q,a])=>`<div class="faq-item"><button class="faq-q" onclick="toggleFaq(this)">${q}<span class="pm">+</span></button><div class="faq-a"><div>${a}</div></div></div>`).join("");
+function toggleFaq(btn){
+  const it=btn.parentElement,a=it.querySelector(".faq-a"),open=it.classList.contains("open");
+  document.querySelectorAll(".faq-item.open").forEach(o=>{o.classList.remove("open");o.querySelector(".faq-a").style.maxHeight=0;});
+  if(!open){it.classList.add("open");a.style.maxHeight=a.scrollHeight+"px";}
+}
+
+/* ══════════════════════════ reveal ══════════════════════════ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}}),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+/* ══════════════════════════ ordens ══════════════════════════ */
+const ORDERS_KEY="sati_orders_v1";
+function loadOrders(){try{return JSON.parse(localStorage.getItem(ORDERS_KEY)||"[]");}catch(e){return[];}}
+function saveOrder(o){const l=loadOrders();l.unshift(o);localStorage.setItem(ORDERS_KEY,JSON.stringify(l.slice(0,200)));}
+function newCode(){const A="23456789ABCDEFGHJKMNPQRSTVWXYZ";let c="SATI-";for(let i=0;i<6;i++)c+=A[Math.floor(Math.random()*A.length)];return c;}
+
+let orderState={kind:null,item:null,qty:null,email:"",name:"",link:"",platform:"instagram",links:{}};
+
+async function loadPayLinks(){
+  if(orderState.links)return orderState.links;
+  try{
+    const r=await fetch(PAYMENTS.linksUrl,{cache:"no-store"});
+    if(r.ok){const j=await r.json();orderState.links=j.links||{};}
+  }catch(e){}
+  return orderState.links;
+}
+
+function openService(id){
+  const s=svc(id);if(!s)return;
+  orderState={kind:"service",item:s,qty:s.presets[Math.min(2,s.presets.length-1)],email:"",name:"",link:"",platform:s.platform,links:orderState.links};
+  renderOrderForm();
+  $("#orderOverlay").classList.add("on");
+  document.body.style.overflow="hidden";
+}
+function openPackage(id){
+  const pk=PACKAGES.find(p=>p.id===id);if(!pk)return;
+  orderState={kind:"package",item:pk,qty:null,email:"",name:"",link:"",platform:"instagram",links:orderState.links};
+  renderOrderForm();
+  $("#orderOverlay").classList.add("on");
+  document.body.style.overflow="hidden";
+}
+function closeOrder(){$("#orderOverlay").classList.remove("on");document.body.style.overflow="";}
+
+function orderQtyOptions(){
+  const s=orderState.item;
+  return `<div class="field"><label>Quantity</label>
+    <div class="qty-chips">${s.presets.map(q=>`<button type="button" class="chip ${orderState.qty===q?"on":""}" onclick="setQty(${q})">${fmtI(q)}</button>`).join("")}</div>
+    <div class="custom-q"><input type="number" min="${s.min}" max="${s.max||200000}" step="${s.unitSize===1?1:50}" value="${orderState.qty}" onchange="setQty(this.value)" aria-label="Custom quantity"><span style="align-self:center;color:var(--muted);font-size:12px">${s.unitLabel||(s.unitSize===1000?"units":"")}</span></div>
+  </div>`;
+}
+function setQty(q){
+  const s=orderState.item;q=Math.max(s.min,Math.min(s.max||200000,Math.floor(Number(q)||s.min)));
+  orderState.qty=q;renderOrderForm(true);
+}
+function setOrderField(k,v){orderState[k]=v;}
+function setOrderPlatform(v){orderState.platform=v;renderOrderForm(true);}
+
+function orderLinesHtml(){
+  if(orderState.kind==="package"){
+    const pk=orderState.item;
+    return `<div class="bundle-list">${pk.items.map(([t,q])=>`<div><span>${labelFor(t)}</span><span>${fmtI(q)}</span></div>`).join("")}
+      <div style="border-top:1px solid var(--line-soft);margin-top:10px;padding-top:12px"><span>Collection total</span><span>${fmt(pk.price)}</span></div></div>`;
+  }
+  const s=orderState.item,p=computePrice(s,orderState.qty);
+  const unit=s.unitSize===1000?"per 1,000":"each";
+  let h=`<div class="bundle-list"><div><span>${s.name} — ${fmtI(orderState.qty)} ${s.unitLabel||(s.unitSize===1000?"":"units")}</span><span>${fmt(p.base)}</span></div>`;
+  if(p.disc>0)h+=`<div><span>Member rate (volume)</span><span>−${Math.round(p.disc*100)}%</span></div>`;
+  return h+`</div>`;
+}
+function orderTotal(){
+  if(orderState.kind==="package")return orderState.item.price;
+  return computePrice(orderState.item,orderState.qty).raw;
+}
+function orderKey(){
+  if(orderState.kind==="service")return `${orderState.item.id}_${orderState.qty}`;
+  return `pkg_${orderState.item.id}_${orderState.platform}`;
+}
+function orderSummaryText(){
+  const who=(orderState.name||"").trim();
+  if(orderState.kind==="service"){const s=orderState.item;return `${s.name} × ${fmtI(orderState.qty)} — ${orderState.link||"@____"} — ${fmt(orderTotal())}${who?" — "+who:""}`;}
+  const pk=orderState.item;return `Collection ${pk.name} (${plat(orderState.platform).name}) — ${orderState.link||"@____"} — ${fmt(pk.price)}${who?" — "+who:""}`;
+}
+
+function renderOrderForm(keep){
+  const st=orderState,body=$("#orderBody");
+  if(st.kind==="service"){
+    const s=st.item,p=plat(s.platform),pr=computePrice(s,st.qty);
+    body.innerHTML=`
+    <div class="m-head"><div class="eyebrow">${p.name}</div><h3>${s.name}</h3>
+      <div class="m-sub">${s.unitSize===1000?"priced per 1,000":"priced per "+(s.unitLabel||"unit")} · starts in minutes</div></div>
+    <div class="field"><label>Your link</label><input type="text" id="oLink" placeholder="${s.unitSize===1000&&/followers|subs|members|likes/.test(s.id)?"@handle or full profile URL":"full post URL"}" value="${esc(st.link)}" onchange="setOrderField('link',this.value)"></div>
+    ${orderQtyOptions()}
+    <div class="field"><label>Your name — for the receipt</label><input type="text" id="oName" placeholder="First name" value="${esc(st.name)}" onchange="setOrderField('name',this.value)"></div>
+    <div class="field"><label>Email — your order code goes here</label><input type="email" id="oEmail" placeholder="you@example.com" value="${esc(st.email)}" onchange="setOrderField('email',this.value)"></div>
+    ${orderLinesHtml()}
+    <div class="total-box"><div class="t-l">Total due<span>paid through Stripe · ${BRAND.statement} on your statement</span></div><b id="oTotal">${fmt(pr.raw)}</b></div>
+    <div class="pay-row">
+      <button class="btn btn-gold" onclick="payOrder()">Pay securely</button>
+      <button class="btn btn-line" onclick="waOrder()">Order via WhatsApp instead</button>
+    </div>
+    <div class="pay-note">No password required · 30-day refill guarantee</div>
+    <div class="err-msg" id="oErr"></div>`;
+  }else{
+    const pk=st.item;
+    body.innerHTML=`
+    <div class="m-head"><div class="eyebrow">The Collections</div><h3>${pk.name}</h3>
+      <div class="m-sub">${pk.tag} · one platform, your choice</div></div>
+    <div class="field"><label>Platform</label><select onchange="setOrderPlatform(this.value)">
+      ${["instagram","tiktok","youtube","x","telegram","threads"].map(pid=>`<option value="${pid}" ${st.platform===pid?"selected":""}>${plat(pid).name}</option>`).join("")}
+    </select></div>
+    <div class="field"><label>Your link</label><input type="text" id="oLink2" placeholder="@handle or full profile URL" value="${esc(st.link)}" onchange="setOrderField('link',this.value)"></div>
+    <div class="field"><label>Your name — for the receipt</label><input type="text" placeholder="First name" value="${esc(st.name)}" onchange="setOrderField('name',this.value)"></div>
+    <div class="field"><label>Email — your order code goes here</label><input type="email" placeholder="you@example.com" value="${esc(st.email)}" onchange="setOrderField('email',this.value)"></div>
+    ${orderLinesHtml()}
+    <div class="total-box"><div class="t-l">Total due<span>paid through Stripe · ${BRAND.statement} on your statement</span></div><b>${fmt(pk.price)}</b></div>
+    <div class="pay-row">
+      <button class="btn btn-gold" onclick="payOrder()">Pay securely</button>
+      <button class="btn btn-line" onclick="waOrder()">Order via WhatsApp instead</button>
+    </div>
+    <div class="pay-note">No password required · 30-day refill guarantee</div>
+    <div class="err-msg" id="oErr"></div>`;
+  }
+  if(!keep){const l=$("#oLink")||$("#oLink2");}
+}
+
+async function payOrder(){
+  const st=orderState,err=$("#oErr");err.textContent="";
+  if(!st.link.trim()){err.textContent="Share your profile or post link so we know where to work.";return;}
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(st.email.trim())){err.textContent="A valid email is needed to send your order code.";return;}
+  st.link=st.link.trim();st.name=st.name.trim();st.email=st.email.trim();
+  const links=await loadPayLinks();
+  const url=links[orderKey()]||links["any"];
+  const order={code:newCode(),kind:st.kind,item:st.kind==="service"?st.item.id:st.item.id,
+    platform:st.platform,link:st.link,name:st.name,email:st.email,
+    qty:st.qty||null,total:orderTotal(),status:"reserved",ts:Date.now(),
+    method:url?"stripe_link":"concierge"};
+  if(url){order.status="payment_started";}
+  saveOrder(order);
+  if(url){window.open(url,"_blank","noopener");}
+  showConfirm(order,!url);
+  toast(url?"Opening secure Stripe checkout…":"Order held — the concierge will send your Stripe payment link.");
+}
+
+function showConfirm(order,concierge){
+  const el=$("#orderBody");
+  const done=order.status!=="reserved"?1:0;
+  el.innerHTML=`<div class="confirm">
+    <div class="ok"><span>✓</span></div>
+    <h3>${concierge?"Order held":"You're in."}</h3>
+    <p>${concierge
+      ? "We've reserved your order. The concierge will send your secure Stripe payment link on WhatsApp or email within minutes — complete it there and delivery begins immediately."
+      : "Your payment opened in a new tab. Complete it and delivery begins within minutes. Keep your code — it follows every step."}</p>
+    <div class="order-code">${order.code}</div>
+    <div class="pay-row">
+      ${concierge?`<button class="btn btn-gold" onclick="waOrderPrepaid(${order.ts})">Send it on WhatsApp now</button>`:`<button class="btn btn-line" onclick="closeOrder()">Done</button>`}
+      <button class="btn btn-ghost" style="align-self:center" onclick="closeOrder()">Close</button>
+    </div>
+  </div>`;
+}
+
+function waMsg(order){
+  const lines=["New SATI order "+(order.code||""),orderSummaryText(),"Qty: "+(order.qty?fmtI(order.qty):"—"),"Total: "+fmt(order.total),"Link: "+(order.link||"—"),"Email: "+(order.email||"—")];
+  return lines.join("\n");
+}
+function waOrder(){
+  const st=orderState;
+  if(!st.link.trim()){$("#oErr").textContent="Share your profile or post link first.";return;}
+  const fake={code:"—",link:st.link,email:st.email,name:st.name,qty:st.qty,total:orderTotal()};
+  const txt=encodeURIComponent("New SATI order\n"+orderSummaryText()+`\nQty: ${st.qty?fmtI(st.qty):"—"}\nTotal: ${fmt(orderTotal())}\nEmail: ${st.email||"—"}`);
+  window.open(`https://wa.me/${PAYMENTS.conciergeWhatsapp}?text=${txt}`,"_blank");
+}
+function waOrderPrepaid(ts){toast("Opening WhatsApp with your order details…");}
+
+/* ══════════════════════════ tracking ══════════════════════════ */
+function openTrack(){$("#trackOverlay").classList.add("on");document.body.style.overflow="hidden";setTimeout(()=>$("#trackCode").focus(),300);}
+function closeTrack(){$("#trackOverlay").classList.remove("on");document.body.style.overflow="";}
+function doTrack(){
+  const code=$("#trackCode").value.trim().toUpperCase();
+  const err=$("#trackErr"),res=$("#trackResult");
+  err.textContent="";res.innerHTML="";
+  if(!code){return;}
+  const o=loadOrders().find(o=>o.code.toUpperCase()===code);
+  if(!o){err.textContent="We don't have that code on this device. Check it, or message the concierge with your email.";return;}
+  const paid=o.status!=="reserved";
+  res.innerHTML=`<div class="t-status">
+    <div class="ts-row done"><span>Order received</span><b>${new Date(o.ts).toLocaleDateString("en-US",{month:"short",day:"numeric"})}</b></div>
+    <div class="ts-row ${paid?"done":""}"><span>Payment confirmed</span><b>${paid?"✓":"pending"}</b></div>
+    <div class="ts-row ${false?"done":""}"><span>In progress</span><b>${paid?"queued":"—"}</b></div>
+    <div class="ts-row ${false?"done":""}"><span>Delivered</span><b>—</b></div>
+    <div style="border-top:1px solid var(--line-soft);margin-top:12px;padding-top:14px;font-size:12.5px;color:var(--muted)">
+      ${o.kind==="service"?svc(o.item).name+" × "+(o.qty?fmtI(o.qty):"—"):("Collection "+o.item)} · ${plat(o.platform).name} · ${fmt(o.total)}<br>
+      Progress updates arrive by email as each wave lands.
+    </div>
+  </div>`;
+}
+$("#trackCode").addEventListener("keydown",e=>{if(e.key==="Enter")doTrack();});
+// hash deep-link: #track
+function hashCheck(){if(location.hash==="#track"&&!$("#trackOverlay").classList.contains("on"))openTrack();else if(location.hash&&location.hash!=="#track"&&!$("#orderOverlay").classList.contains("on")){/* normal anchor */}}
+window.addEventListener("hashchange",hashCheck);
+
+/* footer link whatsapp */
+function waContact(){window.open(`https://wa.me/${PAYMENTS.conciergeWhatsapp}?text=${encodeURIComponent("Hello SATI — I'd like to make an order.")}`,"_blank");}
+
+/* ══════════════════════════ init ══════════════════════════ */
+renderTabs();renderGrid();renderPkgs();
+if(location.hash==="#track")setTimeout(openTrack,400);
+else if(location.hash==="#begin")setTimeout(()=>openService("ig_followers"),400);
+else{
+  const secId=location.hash.slice(1);
+  ["services","packages","how","guarantee","faq"].forEach(id=>{
+    if(secId===id){
+      document.querySelectorAll(".reveal").forEach(el=>{el.style.transition="none";el.classList.add("in");});
+      const el=document.getElementById(id);if(el)requestAnimationFrame(()=>el.scrollIntoView({behavior:"instant",block:"start"}));
+    }
+  });
+}
+</script>
+</body>
+</html>
