@@ -283,7 +283,7 @@ footer.site{border-top:1px solid var(--line-soft);background:var(--bg2);padding:
     <span>No password ever</span><span class="diamond"></span>
     <span>Starts in minutes</span><span class="diamond"></span>
     <span>30-day refill</span><span class="diamond"></span>
-    <span>Secure checkout · Stripe</span>
+    <span>Secure checkout</span>
   </div>
 </section>
 
@@ -324,7 +324,7 @@ footer.site{border-top:1px solid var(--line-soft);background:var(--bg2);padding:
     </div>
     <div class="steps reveal">
       <div class="step"><div class="n">01</div><h3>Choose</h3><p>Pick a service or a collection, and share your public profile or post link. Nothing more is asked of you.</p></div>
-      <div class="step"><div class="n">02</div><h3>Pay</h3><p>Settle up by card, Apple Pay or Google Pay through Stripe. Your bank details never pass our hands.</p></div>
+      <div class="step"><div class="n">02</div><h3>Pay</h3><p>Settle up by card, Apple Pay or Google Pay through our secure provider. Your bank details never pass our hands.</p></div>
       <div class="step"><div class="n">03</div><h3>It arrives</h3><p>Delivery begins within minutes and progresses in gentle waves. You receive an order code to follow every step.</p></div>
     </div>
     <div class="no-pass reveal">We never ask for your password <span class="diamond"></span> <b>ever.</b></div>
@@ -342,7 +342,7 @@ footer.site{border-top:1px solid var(--line-soft);background:var(--bg2);padding:
       <div class="gtile"><svg class="gic" viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 4.4-3 8-7 9-4-1-7-4.6-7-9V7l7-4z"/><path d="M9 12l2 2 4-4"/></svg><h3>30-Day Refill</h3><p>Numbers settle as real audiences do. If anything drops within 30 days, we refill it automatically — no forms, no arguing.</p></div>
       <div class="gtile"><svg class="gic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg><h3>Natural Pacing</h3><p>Your order arrives in soft waves across hours and days — the rhythm the platforms read as organic.</p></div>
       <div class="gtile"><svg class="gic" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><h3>No Password Required</h3><p>A public link is all we take. Your account, your private moments, your business — they stay yours alone.</p></div>
-      <div class="gtile"><svg class="gic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg><h3>Discreet Billing</h3><p>Your statement reads “SATI Growth”. Nothing loud, nothing explaining itself.</p></div>
+      <div class="gtile"><svg class="gic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg><h3>Discreet Billing</h3><p>A low-profile line item on your statement. Nothing loud, nothing explaining itself.</p></div>
     </div>
   </div>
 </section>
@@ -505,7 +505,7 @@ const FAQS = [
  ["How fast is delivery?","Most orders begin within fifteen minutes of payment. Larger orders are intentionally paced over 24–72 hours, in waves, so the growth reads as organic and holds."],
  ["Will it affect my account or algorithm?","No. Gradual, human-paced increments are exactly what the platforms expect to see. That discipline is why SATI numbers stay put while others decay."],
  ["What happens if numbers drop?","Audiences settle, like any living thing. Anything lost within 30 days is refilled automatically — no forms, no negotiation."],
- ["How do I pay?","By card, Apple Pay or Google Pay through Stripe. For PIX, transfer or larger custom builds, write to the concierge and we'll arrange it personally."],
+ ["How do I pay?","By card, Apple Pay or Google Pay through our secure provider. For PIX, transfer or larger custom builds, write to the concierge and we'll arrange it personally."],
  ["Can I get a refund?","If a delivery fails to perform, you're refunded in full. If something feels off in your first 48 hours, speak to us first — we resolve before we refund."],
  ["Is my information safe?","We keep only what the order needs: your link, your name and your email. Nothing sold, nothing shared, nothing stored longer than needed."]
 ];
@@ -703,7 +703,7 @@ function renderOrderForm(keep){
     <div class="field"><label>Your name — for the receipt</label><input type="text" id="oName" placeholder="First name" value="${esc(st.name)}" onchange="setOrderField('name',this.value)"></div>
     <div class="field"><label>Email — your order code goes here</label><input type="email" id="oEmail" placeholder="you@example.com" value="${esc(st.email)}" onchange="setOrderField('email',this.value)"></div>
     ${orderLinesHtml()}
-    <div class="total-box"><div class="t-l">Total due<span>paid through Stripe · ${BRAND.statement} on your statement</span></div><b id="oTotal">${fmt(pr.raw)}</b></div>
+    <div class="total-box"><div class="t-l">Total due<span>paid securely</span></div><b id="oTotal">${fmt(pr.raw)}</b></div>
     <div class="pay-row">
       <button class="btn btn-gold" onclick="payOrder()">Pay securely</button>
       <button class="btn btn-line" onclick="waOrder()">Order via WhatsApp instead</button>
@@ -722,7 +722,7 @@ function renderOrderForm(keep){
     <div class="field"><label>Your name — for the receipt</label><input type="text" placeholder="First name" value="${esc(st.name)}" onchange="setOrderField('name',this.value)"></div>
     <div class="field"><label>Email — your order code goes here</label><input type="email" placeholder="you@example.com" value="${esc(st.email)}" onchange="setOrderField('email',this.value)"></div>
     ${orderLinesHtml()}
-    <div class="total-box"><div class="t-l">Total due<span>paid through Stripe · ${BRAND.statement} on your statement</span></div><b>${fmt(pk.price)}</b></div>
+    <div class="total-box"><div class="t-l">Total due<span>paid securely</span></div><b>${fmt(pk.price)}</b></div>
     <div class="pay-row">
       <button class="btn btn-gold" onclick="payOrder()">Pay securely</button>
       <button class="btn btn-line" onclick="waOrder()">Order via WhatsApp instead</button>
@@ -738,17 +738,19 @@ async function payOrder(){
   if(!st.link.trim()){err.textContent="Share your profile or post link so we know where to work.";return;}
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(st.email.trim())){err.textContent="A valid email is needed to send your order code.";return;}
   st.link=st.link.trim();st.name=st.name.trim();st.email=st.email.trim();
-  const links=await loadPayLinks();
-  const url=links[orderKey()]||links["any"];
-  const order={code:newCode(),kind:st.kind,item:st.kind==="service"?st.item.id:st.item.id,
-    platform:st.platform,link:st.link,name:st.name,email:st.email,
-    qty:st.qty||null,total:orderTotal(),status:"reserved",ts:Date.now(),
-    method:url?"stripe_link":"concierge"};
-  if(url){order.status="payment_started";}
+  const code=newCode(),btn=document.querySelector(".pay-row .btn-gold");
+  if(btn){btn.disabled=true;btn.style.opacity=".7";}
+  let url=null,method="concierge";
+  try{
+    const r=await fetch("https://api.getati.store/checkout",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({kind:st.kind,serviceId:st.kind==="service"?st.item.id:null,pkgId:st.kind==="package"?st.item.id:null,qty:st.qty||null,total:st.kind==="package"?st.item.price:orderTotal(),link:st.link,email:st.email,code:code,label:orderSummaryText()})});
+    const j=await r.json();url=j.url||null;if(url)method="lemon";
+  }catch(e){}
+  if(btn){btn.disabled=false;btn.style.opacity="";}
+  const order={code:code,kind:st.kind,item:st.item.id,platform:st.platform,link:st.link,name:st.name,email:st.email,qty:st.qty||null,total:st.kind==="package"?st.item.price:orderTotal(),status:url?"payment_started":"reserved",ts:Date.now(),method:method};
   saveOrder(order);
   if(url){window.open(url,"_blank","noopener");}
   showConfirm(order,!url);
-  toast(url?"Opening secure Stripe checkout…":"Order held — the concierge will send your Stripe payment link.");
+  toast(url?"Opening secure checkout…":"Order held — the concierge will send your payment link.");
 }
 
 function showConfirm(order,concierge){
@@ -758,7 +760,7 @@ function showConfirm(order,concierge){
     <div class="ok"><span>✓</span></div>
     <h3>${concierge?"Order held":"You're in."}</h3>
     <p>${concierge
-      ? "We've reserved your order. The concierge will send your secure Stripe payment link on WhatsApp or email within minutes — complete it there and delivery begins immediately."
+      ? "We've reserved your order. The concierge will send your secure payment link on WhatsApp or email within minutes — complete it there and delivery begins immediately."
       : "Your payment opened in a new tab. Complete it and delivery begins within minutes. Keep your code — it follows every step."}</p>
     <div class="order-code">${order.code}</div>
     <div class="pay-row">

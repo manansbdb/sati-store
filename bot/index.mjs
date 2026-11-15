@@ -43,6 +43,46 @@ function loadPayLinks() {
 }
 loadPayLinks();
 
+// ─── Lemon Squeezy (Merchant of Record) ─────────────────────────────────────
+let lemonMap = {};
+function loadLemonMap() {
+  try {
+    const f = CFG.lemon?.mapFile ? path.join(__dirname, CFG.lemon.mapFile) : null;
+    if (f && fs.existsSync(f)) lemonMap = JSON.parse(fs.readFileSync(f, 'utf8')) || {};
+  } catch (e) { console.warn('lemonMap load:', e.message); }
+}
+loadLemonMap();
+function getLemonKey() {
+  try { return fs.readFileSync((CFG.lemon?.keyFile || '').replace('~', os.homedir()), 'utf8').trim(); } catch { return null; }
+}
+const LEMON_BASE = 'https://api.lemonsqueezy.com/v1';
+const lemonH = () => ({ Authorization: `Bearer ${getLemonKey()}`, 'Content-Type': 'application/vnd.api+json', Accept: 'application/vnd.api+json' });
+async function lemonCreateCheckout({ variantId, cents, name, description, email, custom }) {
+  const key = getLemonKey();
+  if (!key || !variantId || !CFG.lemon?.storeId) return null;
+  const body = { data: { type: 'checkouts',
+    attributes: { custom_price: cents, test_mode: false,
+      expires_at: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
+      product_options: { name, description, redirect_url: CFG.lemon.redirectUrl },
+      checkout_data: { email: email || undefined, custom: custom || {} } },
+    relationships: { store: { data: { type: 'stores', id: String(CFG.lemon.storeId) } },
+                     variant: { data: { type: 'variants', id: String(variantId) } } } } };
+  try {
+    const r = await fetch(LEMON_BASE + '/checkouts', { method: 'POST', headers: lemonH(), body: JSON.stringify(body) });
+    const d = await r.json();
+    if (!r.ok || !d.data) return { error: (JSON.stringify(d.errors || d)).slice(0, 240) };
+    return { url: d.data.attributes.url, checkoutId: d.data.id };
+  } catch (e) { return { error: e.message }; }
+}
+async function lemonCheckoutStatus(id) {
+  const key = getLemonKey(); if (!key || !id) return null;
+  try { const r = await fetch(`${LEMON_BASE}/checkouts/${id}`, { headers: lemonH() }); const d = await r.json(); return d.data?.attributes || null; } catch { return null; }
+}
+async function lemonRevenue() {
+  const key = getLemonKey(); if (!key || !CFG.lemon?.storeId) return null;
+  try { const r = await fetch(`${LEMON_BASE}/stores/${CFG.lemon.storeId}`, { headers: lemonH() }); const a = (await r.json()).data?.attributes || {}; return { revenue: a.total_revenue ?? 0, sales: a.total_sales ?? 0, currency: a.currency }; } catch { return null; }
+}
+
 // ─── Orders storage ─────────────────────────────────────────────────────────
 function loadOrders() {
   try { return JSON.parse(fs.readFileSync(ORDERS_FILE, 'utf8')); } catch { return []; }
@@ -77,7 +117,8 @@ async function sendBtn(chatId, text, keyboard) {
 // ─── SMM Panel fulfillment ─────────────────────────────────────────────────
 async function fulfill(order) {
   const panel = CFG.smmPanel;
-  if (!panel.apiKey) {
+  const key = getSmmApiKey();
+  if (!key) {
     return { status: 'manual', msg: 'SMM panel não configurado — entregar manualmente.' };
   }
   const svcId = panel.serviceMap[order.serviceId];
@@ -85,7 +126,7 @@ async function fulfill(order) {
     return { status: 'no_mapping', msg: `Sem mapping p/ ${order.serviceId}` };
   }
   const params = new URLSearchParams({
-    key: panel.apiKey,
+    key: key,
     action: 'add',
     service: svcId,
     link: order.link,
@@ -101,8 +142,9 @@ async function fulfill(order) {
 
 async function checkFulfillment(panelOrderId) {
   const panel = CFG.smmPanel;
-  if (!panel.apiKey || !panelOrderId) return null;
-  const params = new URLSearchParams({ key: panel.apiKey, action: 'status', order: String(panelOrderId) });
+  const key = getSmmApiKey();
+  if (!key || !panelOrderId) return null;
+  const params = new URLSearchParams({ key: key, action: 'status', order: String(panelOrderId) });
   const r = await fetch(panel.baseUrl, { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: params });
   return r.json();
 }
@@ -111,6 +153,15 @@ async function checkFulfillment(panelOrderId) {
 function getStripeKey() {
   try {
     const f = os.homedir() + '/.config/drael/stripe.key';
+    return fs.readFileSync(f, 'utf8').trim();
+  } catch { return null; }
+}
+function getSmmApiKey() {
+  const p = CFG.smmPanel || {};
+  if (p.apiKey && String(p.apiKey).trim()) return String(p.apiKey).trim();
+  try {
+    const base = (p.keyFile ? String(p.keyFile) : 'smm.key').replace(/^.*\//, '');
+    const f = os.homedir() + '/.config/drael/' + base;
     return fs.readFileSync(f, 'utf8').trim();
   } catch { return null; }
 }
@@ -222,21 +273,31 @@ async function handleLink(chatId, link) {
   const s = st.service, qty = st.qty;
   const price = calcPrice(s, qty);
   const orderKey = `${s.id}_${qty}`;
-  const payUrl = payLinks[orderKey];
+  const code = genCode();
+
+  // Payment source: Lemon MoR (preferred) → Stripe link → concierge
+  let pay = { kind: 'none', url: null, checkoutId: null, method: 'concierge' };
+  const variantId = lemonMap.serviceVariants && lemonMap.serviceVariants[s.id];
+  if (variantId) {
+    const co = await lemonCreateCheckout({
+      variantId, cents: Math.round(price.raw * 100),
+      name: `${PLATFORM_NAMES[s.platform]} ${s.name} × ${qty.toLocaleString()}`,
+      description: s.blurb,
+      custom: { code, chatId, serviceId: s.id, qty }
+    });
+    if (co && co.url) pay = { kind: 'lemon', url: co.url, checkoutId: co.checkoutId, method: 'lemon' };
+    else if (co && co.error) console.error(`[lemon] checkout fail (${orderKey}):`, co.error);
+  }
+  if (pay.kind === 'none' && payLinks[orderKey]) {
+    pay = { kind: 'stripe', url: payLinks[orderKey], method: 'stripe_link' };
+  }
 
   const order = {
-    code: genCode(),
-    chatId,
-    serviceId: s.id,
-    serviceName: s.name,
-    platform: s.platform,
-    qty,
-    link: link.trim(),
+    code, chatId, serviceId: s.id, serviceName: s.name, platform: s.platform,
+    qty, link: link.trim(),
     total: Math.round(price.raw * 100) / 100,
-    discount: price.disc,
-    status: 'awaiting_payment',
-    ts: Date.now(),
-    payUrl: payUrl || null
+    discount: price.disc, status: 'awaiting_payment', ts: Date.now(),
+    method: pay.method, payUrl: pay.url, lemonCheckoutId: pay.checkoutId
   };
   addOrder(order);
 
@@ -251,9 +312,16 @@ async function handleLink(chatId, link) {
   msg += `\n💰 Total: <b>$${order.total.toFixed(2)}</b>`;
   msg += `\n\n📋 Código: <code>${order.code}</code>`;
 
-  if (payUrl) {
+  if (pay.kind === 'lemon') {
     const btns = [
-      [['💳 Pagar agora', `pay:${payUrl}`]],
+      [{ text: '💳 Pagar agora', url: pay.url }],
+      [['✅ Já paguei', `confirm:${order.code}`]],
+      [['📞 Falar concierge', `concierge:${order.code}`]]
+    ];
+    await sendBtn(chatId, msg + `\n\nAbra o checkout, pague e volte aqui (a entrega começa sozinha assim que o pagamento confirmar):`, btns);
+  } else if (pay.kind === 'stripe') {
+    const btns = [
+      [['💳 Pagar agora', `pay:${pay.url}`]],
       [['✅ Já paguei', `confirm:${order.code}`]],
       [['📞 Falar concierge', `concierge:${order.code}`]]
     ];
@@ -269,7 +337,7 @@ async function handleLink(chatId, link) {
 
   // Notify admin
   if (CFG.adminUserId) {
-    const adminMsg = `🔔 <b>Novo pedido</b>\n\n<code>${order.code}</code>\n${s.name} × ${qty.toLocaleString()}\n@${PLATFORM_NAMES[s.platform]}: ${link.trim().slice(0, 50)}\n💰 $${order.total.toFixed(2)}\n\nCliente: @${username || chatId}`;
+    const adminMsg = `🔔 <b>Novo pedido</b> [${pay.kind}]\n\n<code>${order.code}</code>\n${s.name} × ${qty.toLocaleString()}\n@${PLATFORM_NAMES[s.platform]}: ${link.trim().slice(0, 50)}\n💰 $${order.total.toFixed(2)}\n\nCliente: ${chatId}`;
     await send(CFG.adminUserId, adminMsg).catch(() => {});
   }
 }
@@ -344,6 +412,69 @@ async function handleTrack(chatId, codeInput) {
   await send(chatId, msg);
 }
 
+// ─── Delivery watcher (acompanha pedidos em entrega até concluir) ──────────
+const DELIVERY_POLL_MS = 45000;      // checa a cada 45s
+const DELIVERY_GRACE_MS = 6 * 3600e3; // desiste/flagga parcial após 6h
+
+async function notifyPartialOrFailed(o, st, kind) {
+  const arrived = o.qty - Number(st.remains || 0);
+  const wa = `https://wa.me/${CFG.whatsapp}?text=${encodeURIComponent('SATI ' + o.code + ' — ' + (kind === 'parcial' ? 'entrega parcial' : 'problema na entrega') + ' (painel ' + o.panelOrderId + ')')}`;
+  const text = kind === 'parcial'
+    ? `⚠️ <b>Entrega parcial</b>\n\nNo pedido <code>${o.code}</code> chegaram ${arrived.toLocaleString()} de ${o.qty.toLocaleString()} seguidores e o serviço parou no meio.\n\nMe chama no concierge que eu completo o restante sem custo:`
+    : `😕 <b>Problema na entrega</b>\n\nO pedido <code>${o.code}</code> teve uma falha no fornecedor.\n\nFala com o concierge que eu refaço ou devolvo:`;
+  await sendBtn(o.chatId, text, [[{ text: '📞 Falar concierge', url: wa }]]).catch(() => {});
+  if (CFG.adminUserId) await send(CFG.adminUserId, `${kind === 'parcial' ? '⚠️' : '❌'} ${o.code} ${kind} (painel ${o.panelOrderId}, remains=${st.remains})`).catch(() => {});
+}
+
+async function deliveryWatcher() {
+  while (running) {
+    try {
+      const orders = loadOrders();
+      for (const o of orders) {
+        if (o.status !== 'fulfilling' || !o.panelOrderId || o._done) continue;
+        const st = await checkFulfillment(o.panelOrderId);
+        if (!st || st.error) continue;
+        const s = (st.status || '').toLowerCase();
+        const startedAt = o.fulfilledAt || o.ts;
+        if (s === 'completed' || s === 'done' || Number(st.start_count || 0) >= o.qty) {
+          updateOrder(o.code, { status: 'delivered', deliveredAt: Date.now(), _done: true });
+          await send(o.chatId, `✅ <b>Entrega concluída!</b>\n\nSeu pedido <code>${o.code}</code> (${o.serviceName} ×${o.qty.toLocaleString()}) chegou no perfil.\n\nObrigado por escolher o SATI.`).catch(() => {});
+          if (CFG.adminUserId) await send(CFG.adminUserId, `✅ ${o.code} entregue (painel ${o.panelOrderId})`).catch(() => {});
+        } else if (s === 'cancelled' || s === 'error' || s === 'failed') {
+          updateOrder(o.code, { status: 'failed', _done: true, error: st.status });
+          await notifyPartialOrFailed(o, st, 'falha');
+        } else if (s === 'partial' && Date.now() - startedAt > DELIVERY_GRACE_MS) {
+          updateOrder(o.code, { status: 'partial_final', _done: true, remains: st.remains });
+          await notifyPartialOrFailed(o, st, 'parcial');
+        }
+      }
+    } catch (e) { console.error('deliveryWatcher:', e.message); }
+    await new Promise(r => setTimeout(r, DELIVERY_POLL_MS));
+  }
+}
+
+// ─── Payment watcher (auto-entrega quando o checkout Lemon é pago) ─────────
+async function paymentWatcher() {
+  while (running) {
+    try {
+      const orders = loadOrders();
+      for (const o of orders) {
+        if (o.status !== 'awaiting_payment' || !o.lemonCheckoutId) continue;
+        const att = await lemonCheckoutStatus(o.lemonCheckoutId);
+        if (!att) continue;
+        const paid = att.order_id || att.status === 'paid' || att.status === 'completed';
+        if (paid) {
+          console.log(`[lemon] pagamento confirmado ${o.code} (checkout ${o.lemonCheckoutId})`);
+          await handleConfirmPayment(o.chatId, o.code).catch(() => {});
+        } else if (att.status === 'expired' || att.status === 'cancelled' || att.status === 'canceled') {
+          updateOrder(o.code, { status: 'expired' });
+        }
+      }
+    } catch (e) { console.error('paymentWatcher:', e.message); }
+    await new Promise(r => setTimeout(r, 20000));
+  }
+}
+
 // ─── Main polling loop ─────────────────────────────────────────────────────
 let offset = 0;
 let running = true;
@@ -410,10 +541,12 @@ async function poll() {
             await handleTrack(chatId);
           } else if (text === '/status') {
             // Admin: show balance + recent orders
+            const rev = await lemonRevenue();
             const bal = await stripeBalanceCheck();
             const orders = loadOrders();
             let msg = `📊 <b>SATI Status</b>\n`;
-            if (bal?.available) msg += `💰 Stripe balance: $${(bal.available[0].amount / 100).toFixed(2)}\n`;
+            if (rev) msg += `💰 Lemon MoR: ${rev.currency} ${(rev.revenue / 100).toFixed(2)} · ${rev.sales} vendas\n`;
+            if (bal?.available) msg += `💳 Stripe (reserva): $${(bal.available[0].amount / 100).toFixed(2)}\n`;
             const recent = orders.slice(-5).reverse();
             msg += `\nÚltimos pedidos:\n`;
             for (const o of recent) {
@@ -449,9 +582,12 @@ async function poll() {
               await handleLink(chatId, text);
             }
           } else if (text === 'balanco' || text === 'balance') {
+            const rev = await lemonRevenue();
             const bal = await stripeBalanceCheck();
-            if (bal?.available) await send(chatId, `💰 Stripe: $${(bal.available[0].amount / 100).toFixed(2)}`);
-            else await send(chatId, 'Não consegui ler o balance.');
+            const parts = [];
+            if (rev) parts.push(`💰 Lemon MoR: ${rev.currency} ${(rev.revenue / 100).toFixed(2)} (${rev.sales} vendas)`);
+            if (bal?.available) parts.push(`💳 Stripe: $${(bal.available[0].amount / 100).toFixed(2)}`);
+            await send(chatId, parts.length ? parts.join('\n') : 'Sem saldo disponível.');
           } else {
             if (st.step !== 'idle') {
               await send(chatId, 'Entendi. Se quiser recomeçar: /start');
@@ -475,8 +611,12 @@ async function poll() {
 
 console.log('🚀 SATI Bot iniciado (long polling)');
 console.log(`   Services: ${CATALOG.length} | Pay links: ${Object.keys(payLinks).length}`);
-console.log(`   SMM Panel: ${CFG.smmPanel.name}${CFG.smmPanel.apiKey ? ' ✅' : ' ⚠️ (sem API key)'}`);
+console.log(`   SMM Panel: ${CFG.smmPanel.name}${getSmmApiKey() ? ' ✅' : ' ⚠️ (sem API key)'}`);
+console.log(`   Entregas automáticas: ${Object.keys(CFG.smmPanel.serviceMap || {}).length} serviço(s) mapeado(s)`);
+console.log(`   Lemon MoR: ${getLemonKey() ? 'chave ok' : '⚠️ sem chave'} · variantes: ${Object.keys(lemonMap.serviceVariants || {}).length} (0 = usa Stripe)`)
 poll();
+deliveryWatcher();
+paymentWatcher();
 
 process.on('SIGTERM', () => { running = false; process.exit(0); });
 process.on('SIGINT', () => { running = false; process.exit(0); });

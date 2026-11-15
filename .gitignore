@@ -1,2 +1,13 @@
 .preview-*.png
 .DS_Store
+# n8n / credenciais locais
+.n8n-enc.key
+.n8n-owner.pass
+n8n*.log
+n8n-run.sh
+mint-n8nkey.zsh
+# rascunhos de mapeamento
+.scratch/.drael-*
+tools/.links-manifest.json
+
+.wrangler/
